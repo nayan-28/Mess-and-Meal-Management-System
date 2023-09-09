@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\BorderAuth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BorderController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
 
-class PasswordResetLinkController extends Controller
+class PasswordResetLinkController extends BorderController
 {
     /**
      * Display the password reset link request view.

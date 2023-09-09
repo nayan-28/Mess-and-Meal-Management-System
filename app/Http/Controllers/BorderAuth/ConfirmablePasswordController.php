@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\BorderAuth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BorderController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
-class ConfirmablePasswordController extends Controller
+class ConfirmablePasswordController extends BorderController
 {
     /**
      * Show the confirm password view.

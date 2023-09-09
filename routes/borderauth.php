@@ -10,6 +10,8 @@ use App\Http\Controllers\BorderAuth\PasswordResetLinkController;
 use App\Http\Controllers\BorderAuth\RegisteredUserController;
 use App\Http\Controllers\BorderAuth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BorderProfileController;
+use App\Http\Controllers\BorderController;
 
 Route::group(['middleware'=>['guest:border'],'prefix'=>'border','as'=>'border.'],function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -36,6 +38,11 @@ Route::group(['middleware'=>['guest:border'],'prefix'=>'border','as'=>'border.']
 });
 
 Route::group(['middleware'=>['auth:border'],'prefix'=>'border','as'=>'border.'],function() {
+        Route::get('/profile', [BorderProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [BorderProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [BorderProfileController::class, 'destroy'])->name('profile.destroy');
+
+
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

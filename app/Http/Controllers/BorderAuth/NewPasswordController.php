@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\BorderAuth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BorderController;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
-class NewPasswordController extends Controller
+class NewPasswordController extends BorderController
 {
     /**
      * Display the password reset view.

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\BorderAuth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BorderController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
-class PasswordController extends Controller
+class PasswordController extends BorderController
 {
     /**
      * Update the user's password.

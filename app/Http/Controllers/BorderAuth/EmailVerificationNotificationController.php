@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\BorderAuth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BorderController;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class EmailVerificationNotificationController extends Controller
+class EmailVerificationNotificationController extends BorderController
 {
     /**
      * Send a new email verification notification.
