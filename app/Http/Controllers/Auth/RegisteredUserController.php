@@ -33,13 +33,16 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'string', 'max:11', 'unique:users', 'regex:/^0\d{10}$/'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
+        $generatedKey = $this->generateUniqueKey();
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'key' => $generatedKey,
         ]);
 
         event(new Registered($user));
@@ -47,5 +50,13 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+    private function generateUniqueKey()
+    {
+        do {
+            $generatedKey = strtoupper(substr(uniqid(), -8));
+        } while (User::where('key', $generatedKey)->exists());
+
+        return $generatedKey;
     }
 }

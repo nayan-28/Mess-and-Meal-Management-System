@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\BorderAuth;
 
-use App\Http\Controllers\BorderController;
+use App\Http\Controllers\Controller;
 use App\Models\Border;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
-class RegisteredUserController extends BorderController
+class BorderRegisteredUserController extends Controller
 {
     /**
      * Display the registration view.
@@ -33,12 +33,22 @@ class RegisteredUserController extends BorderController
     $request->validate([
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:'.Border::class],
+        'phone' => ['required', 'string', 'max:11', 'unique:borders', 'regex:/^0\d{10}$/'],
+        'key' => [
+            'required',
+            'string',
+            'size:8',
+            'regex:/^(?=.*[A-Z])(?=.*[0-9])/',
+        ],
+
         'password' => ['required', 'confirmed', Rules\Password::defaults()],
     ]);
 
     $user = Border::create([
         'name' => $request->name,
         'email' => $request->email,
+        'phone' => $request->phone,
+        'key' => $request->key,
         'password' => Hash::make($request->password),
     ]);
 

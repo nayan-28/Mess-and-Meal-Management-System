@@ -26,6 +26,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('newMember', [ProfileController::class, 'newMember'])->name('newMember');
+    Route::post('approvemember',[ProfileController::class,'approvemember'])
+    ->name('approvemember');
+    Route::post('rejectmember',[ProfileController::class,'rejectmember'])
+    ->name('rejectmember');
+    Route::get('oldMember', [ProfileController::class, 'oldMember'])
+    ->name('oldMember');
+    Route::post('removemember',[ProfileController::class,'removemember'])
+    ->name('removemember');
+    Route::get('payment', [ProfileController::class, 'payment'])
+    ->name('payment');
+    Route::post('updatedetails', [ProfileController::class, 'updatedetails'])
+    ->name('updatedetails');
+    Route::post('addcurrentmember', [ProfileController::class, 'addcurrentmember'])
+    ->name('addcurrentmember');
+    Route::get('mealdetails', [ProfileController::class, 'mealdetails'])
+    ->name('mealdetails');
 });
 
 require __DIR__.'/auth.php';

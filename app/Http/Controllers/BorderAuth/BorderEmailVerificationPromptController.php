@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\BorderAuth;
 
 
-use App\Http\Controllers\BorderController;
+use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class EmailVerificationPromptController extends BorderController
+class BorderEmailVerificationPromptController extends Controller
 {
     /**
      * Display the email verification prompt.
@@ -18,6 +18,6 @@ class EmailVerificationPromptController extends BorderController
     {
         return $request->user()->hasVerifiedEmail()
                     ? redirect()->intended(RouteServiceProvider::BORDER_HOME)
-                    : view('auth.verify-email');
+                    : view('border.auth.verify-email');
     }
 }

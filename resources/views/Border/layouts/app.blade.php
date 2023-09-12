@@ -34,6 +34,7 @@
             {{ $slot }}
         </main>
     </div>
+    @include('border.layouts.footer')
 </body>
 
 </html>

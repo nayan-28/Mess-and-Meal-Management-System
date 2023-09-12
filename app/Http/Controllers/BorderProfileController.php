@@ -6,10 +6,11 @@ use App\Http\Requests\BorderProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
-class BorderProfileController extends BorderController
+class BorderProfileController extends Controller
 {
     /**
      * Display the user's profile form.
@@ -56,5 +57,34 @@ class BorderProfileController extends BorderController
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function paymentdetails(){
+        $id=Auth::user()->id;
+        $borderPayments = DB::table('payment_details')->where('user_id','=',$id)->get();
+        return view('border.paymentdetails', compact('borderPayments'));
+    }
+
+    public function mealdetails(){
+        $id=Auth::user()->id;
+        $bordermeals = DB::table('meal')->where('user_id','=',$id)->get();
+        return view('border.mealdetails', compact('bordermeals'));
+    }
+
+    public function addmeals(Request $request){
+        $id = Auth::user()->id;
+        $morning = $request->input('morning') ?? 0;
+        $lunch = $request->input('lunch') ?? 0;
+        $dinner = $request->input('dinner') ?? 0;
+        $date = $request->input('date') ?? now();
+
+DB::table('meal')->insert([
+    'user_id' => $id,
+    'morning' => $morning,
+    'lunch' => $lunch,
+    'dinner' => $dinner,
+    'date' => $date,
+]);
+        return redirect()->back();
     }
 }

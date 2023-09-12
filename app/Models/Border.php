@@ -22,7 +22,9 @@ class Border extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
+        'key',
     ];
 
     /**

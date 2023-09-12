@@ -1,17 +1,36 @@
 <x-border-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
+    <div class="panel-heading">
+        <h2 class="text-center mt-3">Mess & Meal Management System</h2>
     </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center">S.L</th>
+                <th scope="col" class="text-center">Details</th>
+                <th scope="col" class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row" class="text-center">1</th>
+                <td>Meal Details</td>
+                <td class="text-center"><a href="{{ route('border.mealdetails')}}" class="btn btn-primary">
+                        View
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" class="text-center">2</th>
+                <td>Payment Details</td>
+                <td class="text-center"><a href={{ route('border.paymentdetails')}}" class="btn btn-secondary">View </a>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" class="text-center">3</th>
+                <td>Meal & Others Information</td>
+                <td class="text-center"><a href="#" class="btn btn-success">View
+                    </a> </td>
+            </tr>
+        </tbody>
+    </table>
 </x-border-app-layout>

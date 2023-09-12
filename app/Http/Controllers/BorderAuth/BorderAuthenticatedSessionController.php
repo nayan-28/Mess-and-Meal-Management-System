@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\BorderAuth;
 
 
-use App\Http\Controllers\BorderController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\BorderAuth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class AuthenticatedSessionController extends BorderController
+class BorderAuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
