@@ -15,7 +15,7 @@
                             <th>দুপুর</th>
                             <th>রাত</th>
                             <th>তারিখ</th>
-                            <th>Add Meal</th>
+                            <th>যোগ করুন</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,42 +25,36 @@
                         @endphp
                         @foreach($bordermeals as $row)
                         <tr>
-                            <td>{{ ++$counter }}</td>
-                            <td>{{$row->morning}}</td>
-                            <td>{{$row->lunch}}</td>
-                            <td>{{$row->dinner}}</td>
-                            <td>{{$row->date}}</td>
+                            <td class="text-center">{{ ++$counter }}</td>
+                            <td class="text-center">{{$row->morning}}</td>
+                            <td class="text-center">{{$row->lunch}}</td>
+                            <td class="text-center">{{$row->dinner}}</td>
+                            <td class="text-center">{{$row->date}}</td>
                         </tr>
                         @php
                         $totalMeals += ($row->morning + $row->lunch + $row->dinner);
                         @endphp
                         @endforeach
-
                         <tr>
                             <td>সর্বমোট মিল সংখ্যা</td>
-                            <td>{{$totalMeals}}</td>
+                            <td colspan="4">{{$totalMeals}}</td>
                         </tr>
                         <tr>
                             <form action="{{ route('border.addmeals') }}" method="POST">
                                 @csrf
                                 <td></td>
                                 <td><input type="number" name="morning" placeholder="দশমিক সংখ্যা অগ্রহণযোগ্য"
-                                        class="form-control form-control-sm">
-                                </td>
+                                        class="form-control form-control-sm" required></td>
                                 <td><input type="number" name="lunch" placeholder="দশমিক সংখ্যা অগ্রহণযোগ্য"
-                                        class="form-control form-control-sm">
-                                </td>
+                                        class="form-control form-control-sm" required></td>
                                 <td><input type="number" placeholder="দশমিক সংখ্যা অগ্রহণযোগ্য" name="dinner"
-                                        class="form-control form-control-sm">
-                                </td>
-                                <td><input type="date" name="date" class="form-control form-control-sm">
-                                </td>
+                                        class="form-control form-control-sm" required></td>
+                                <td><input type="date" name="date" class="form-control form-control-sm"></td>
                                 <td class="text-center">
-                                    <button class="btn btn-primary" type="submit" name="addmeal">Add</button>
+                                    <button class="btn btn-primary" type="submit" name="addmeal">+</button>
                                 </td>
                             </form>
                         </tr>
-
                     </tbody>
                 </table>
             </div>

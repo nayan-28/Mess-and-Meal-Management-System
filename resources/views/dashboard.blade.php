@@ -27,7 +27,7 @@
             </tr>
             <tr>
                 <th scope="row" class="text-center">3</th>
-                <td>Meal Management</td>
+                <td>Meal & Deposit Management</td>
                 <td class="text-center"><a href="{{route('mealdetails')}}" class="btn btn-success">View
                     </a> </td>
             </tr>

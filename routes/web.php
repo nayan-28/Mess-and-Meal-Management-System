@@ -39,10 +39,17 @@ Route::middleware('auth')->group(function () {
     ->name('payment');
     Route::post('updatedetails', [ProfileController::class, 'updatedetails'])
     ->name('updatedetails');
+
+    Route::post('adddeposit', [ProfileController::class, 'adddeposit'])
+    ->name('adddeposit');
+
     Route::post('addcurrentmember', [ProfileController::class, 'addcurrentmember'])
     ->name('addcurrentmember');
     Route::get('mealdetails', [ProfileController::class, 'mealdetails'])
     ->name('mealdetails');
+    Route::post('history', [ProfileController::class, 'meallist'])
+    ->name('meallist');
+
 });
 
 require __DIR__.'/auth.php';

@@ -15,6 +15,7 @@
                             <th>ওয়াইফাই বিল</th>
                             <th>বিদ্যুৎ বিল</th>
                             <th>রাধুনী বিল</th>
+                            <th>অতিরিক্ত জমা</th>
                             <th>খাবার বাবদ জমা</th>
                             <th>সর্বমোট</th>
                         </tr>
@@ -32,7 +33,12 @@
                             <td>{{$row->electric_bill}}</td>
                             <td>{{$row->radhuni_bill}}</td>
                             <td>{{$row->extra_bill}}</td>
-                            <td>{{$row->house_rent + $row->wifi_bill + $row->electric_bill + $row->radhuni_bill + $row->extra_bill}}
+                            <td>
+                                @foreach($bordertotaldeposit as $deposit)
+                                {{ isset($deposit->total_amount) ? $deposit->total_amount : 0 }}
+                                @endforeach
+                            </td>
+                            <td>{{$row->house_rent + $row->wifi_bill + $row->electric_bill + $row->radhuni_bill + $row->extra_bill + (isset($deposit->total_amount) ? $deposit->total_amount : 0)}}
                             </td>
                         </tr>
                         @endforeach

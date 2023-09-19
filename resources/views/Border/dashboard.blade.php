@@ -22,7 +22,8 @@
             <tr>
                 <th scope="row" class="text-center">2</th>
                 <td>Payment Details</td>
-                <td class="text-center"><a href={{ route('border.paymentdetails')}}" class="btn btn-secondary">View </a>
+                <td class="text-center"><a href="{{ route('border.paymentdetails')}}" class=" btn btn-secondary">View
+                    </a>
                 </td>
             </tr>
             <tr>

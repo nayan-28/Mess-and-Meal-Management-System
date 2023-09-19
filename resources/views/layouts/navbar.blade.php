@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <b><a class="navbar-brand" href="#">Bachelor Life</a></b>
+        <b><a class="navbar-brand" href="#">Amar Mess</a></b>
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
