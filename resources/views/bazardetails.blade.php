@@ -21,7 +21,6 @@
                                         <th>টাকার পরিমাণ</th>
                                         <th>তারিখ</th>
                                         <th>বাজারকারী</th>
-                                        <th>যোগ করুন</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -41,7 +40,18 @@
                                             @endif
                                             @endforeach</td>
                                     </tr>
+                                    @php
+                                    $totalcosts += ($row ->amount);
+                                    @endphp
                                     @endforeach
+                                    <tr>
+                                        <th>সর্বমোট খরচ</th>
+                                        <td></td>
+                                        <td class="text-center"><b>{{$totalcosts}}</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <th>যোগ করুন</th>
+                                    </tr>
                                     <tr>
                                         <form action="{{route('addbazar')}}" method="POST">
                                             @csrf
