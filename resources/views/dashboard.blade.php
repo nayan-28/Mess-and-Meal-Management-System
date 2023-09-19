@@ -40,7 +40,7 @@
             <tr>
                 <th scope="row" class="text-center">5</th>
                 <td>Bazar Information</td>
-                <td class="text-center"><a href="#" class="btn btn-warning">View </a>
+                <td class="text-center"><a href="{{ route('bazardetails')}}" class="btn btn-warning">View </a>
                 </td>
             </tr>
         </tbody>

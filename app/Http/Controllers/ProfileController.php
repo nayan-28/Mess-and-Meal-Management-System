@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Validator;
 class ProfileController extends Controller
 {
     /**
@@ -150,7 +150,7 @@ public function payment(Request $request)
         })
         ->where('borders.status', 1)
         ->whereMonth('payment_details.date', $currentMonth)
-        ->select('borders.*', 'payment_details.*')
+        ->select('borders.name','borders.id', 'payment_details.*')
         ->get();
 
     // Retrieve 'borders_mealcharge_deposit' data for the current month
@@ -162,7 +162,6 @@ public function payment(Request $request)
     ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
     ->groupBy('payment_details.user_id')
     ->get();
-
 
     // Pass the data to the 'payment' view
     return view('payment', compact('borderPayments', 'bordertotaldeposit'));
@@ -291,4 +290,52 @@ public function adddeposit(Request $request){
     return redirect()->back();
 }
 
+public function bazardetails(){
+    $currentMonth = Carbon::now()->month;
+
+    // Retrieve payment details for 'borders' in the current month
+    $border = DB::table('borders')
+        ->join('payment_details', function ($join) {
+            $join->on('borders.key', '=', 'payment_details.key')
+                 ->on('borders.id', '=', 'payment_details.user_id');
+        })
+        ->where('borders.status', 1)
+        ->whereMonth('payment_details.date', $currentMonth)
+        ->select('borders.name','borders.id')
+        ->get();
+
+        $bazardetails = DB::table('bazardetails')->select('*')->whereMonth('date' ,'=', $currentMonth)->get();
+
+    return view('bazardetails',compact('border','bazardetails'));
+}
+
+public function addbazar(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'details' => 'required|string',
+        'amount' => 'required|numeric',
+        'date' => 'required|date',
+        'id' => 'required|string',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
+    $details = $request->input('details');
+    $amount = $request->input('amount');
+    $date = $request->input('date');
+    $id = $request->input('id');
+
+    DB::table('bazardetails')->insert([
+        'user_id' => $id,
+        'bazardetails' => $details,
+        'amount' => $amount,
+        'date' => $date,
+    ]);
+
+    return redirect()->back();
+}
 }
