@@ -53,6 +53,10 @@ Route::middleware('auth')->group(function () {
     ->name('bazardetails');
     Route::post('addingbazar', [ProfileController::class, 'addbazar'])
     ->name('addbazar');
+    Route::get('mealcalculation', [ProfileController::class, 'mealcalculation'])
+    ->name('mealcalculation');
+    Route::post('calculation', [ProfileController::class, 'calculation'])
+    ->name('calculation');
 
 });
 

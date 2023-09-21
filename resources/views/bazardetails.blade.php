@@ -32,7 +32,7 @@
                                     <tr>
                                         <td class="text-center">{{ ++$counter }}</td>
                                         <td class="text-center">{{$row->bazardetails}}</td>
-                                        <td class="text-center">{{$row->amount}}</td>
+                                        <td class="text-center">{{$row->amount}} টাকা</td>
                                         <td class="text-center">{{$row->date}}</td>
                                         <td class="text-center">@foreach($border as $borderRow)
                                             @if($borderRow->id == $row->user_id)
@@ -47,7 +47,7 @@
                                     <tr>
                                         <th>সর্বমোট খরচ</th>
                                         <td></td>
-                                        <td class="text-center"><b>{{$totalcosts}}</b></td>
+                                        <td class="text-center"><b>{{$totalcosts}}</b> টাকা</td>
                                         <td></td>
                                         <td></td>
                                         <th>যোগ করুন</th>

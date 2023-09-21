@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <div class="container">
         <div class="card mt-5">
             <div class="card-body">
@@ -45,7 +44,6 @@
                                         <td class="text-center">{{$totaldeposit}}</td>
                                     </tr>
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -53,7 +51,5 @@
                 </div>
             </div>
         </div>
-    </div>
-    </div>
     </div>
 </x-app-layout>

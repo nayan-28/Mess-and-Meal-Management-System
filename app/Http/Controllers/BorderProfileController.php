@@ -80,7 +80,9 @@ class BorderProfileController extends Controller
 
     public function mealdetails(){
         $id=Auth::user()->id;
-        $bordermeals = DB::table('meal')->where('user_id','=',$id)->get();
+        $currentMonth = Carbon::now()->month;
+        $bordermeals = DB::table('meal')->where('user_id','=',$id)
+        ->whereMonth('date', $currentMonth)->get();
         return view('border.mealdetails', compact('bordermeals'));
     }
 
