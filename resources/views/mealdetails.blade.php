@@ -57,9 +57,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row">
-                            {{$mealdetails->links() }}
-                        </div>
                     </div>
                 </div>
             </div>

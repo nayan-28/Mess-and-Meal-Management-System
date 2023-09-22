@@ -141,7 +141,7 @@ public function payment(Request $request)
 {
     // Get the current month
     $currentMonth = Carbon::now()->month;
-
+    $key = Auth::user()->key;
     // Retrieve payment details for 'borders' in the current month
     $borderPayments = DB::table('borders')
         ->join('payment_details', function ($join) {
@@ -149,6 +149,7 @@ public function payment(Request $request)
                  ->on('borders.id', '=', 'payment_details.user_id');
         })
         ->where('borders.status', 1)
+        ->where('payment_details.key', $key)
         ->whereMonth('payment_details.date', $currentMonth)
         ->select('borders.name','borders.id', 'payment_details.*')
         ->get();
@@ -213,7 +214,7 @@ public function addcurrentmember(Request $request){
 
 public function mealdetails(){
     $currentMonth = Carbon::now()->month;
-$key = Auth::user()->key;
+    $key = Auth::user()->key;
 
 $mealdetails = DB::table('meal')
     ->join('payment_details', function ($join) use ($key, $currentMonth) {
@@ -241,7 +242,6 @@ $mealdetails = DB::table('meal')
     ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
     ->groupBy('payment_details.user_id')
     ->get();
-
 return view('mealdetails',compact('mealdetails','bordertotaldeposit'));
 
 }
@@ -264,7 +264,7 @@ public function meallist(Request $request){
     return view('depositdetails',compact('deposithistory'));
     }
     elseif ($request->has('meallist')) {
-$meallist = DB::table('meal')
+    $meallist = DB::table('meal')
     ->join('payment_details', function ($join) use ($key, $currentMonth,$user_id) {
         $join->on('meal.user_id', '=', 'payment_details.user_id')
             ->where('payment_details.key', '=', $key)
@@ -293,7 +293,7 @@ public function adddeposit(Request $request){
 
 public function bazardetails(){
     $currentMonth = Carbon::now()->month;
-
+    $key = Auth::user()->key;
     // Retrieve payment details for 'borders' in the current month
     $border = DB::table('borders')
         ->join('payment_details', function ($join) {
@@ -301,16 +301,18 @@ public function bazardetails(){
                  ->on('borders.id', '=', 'payment_details.user_id');
         })
         ->where('borders.status', 1)
+        ->where('payment_details.key',$key)
         ->whereMonth('payment_details.date', $currentMonth)
         ->select('borders.name','borders.id')
         ->get();
 
-        $bazardetails = DB::table('bazardetails')->select('*')->whereMonth('date' ,'=', $currentMonth)->get();
+        $bazardetails = DB::table('bazardetails')->select('*')->where('join_key',$key)->whereMonth('date' ,'=', $currentMonth)->get();
     return view('bazardetails',compact('border','bazardetails'));
 }
 
 public function addbazar(Request $request)
 {
+    $key = Auth::user()->key;
     $validator = Validator::make($request->all(), [
         'details' => 'required|string',
         'amount' => 'required|numeric',
@@ -331,6 +333,7 @@ public function addbazar(Request $request)
 
     DB::table('bazardetails')->insert([
         'user_id' => $id,
+        'join_key' => $key,
         'bazardetails' => $details,
         'amount' => $amount,
         'date' => $date,

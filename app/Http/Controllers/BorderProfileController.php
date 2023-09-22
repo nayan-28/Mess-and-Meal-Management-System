@@ -63,6 +63,12 @@ class BorderProfileController extends Controller
     public function paymentdetails(){
         $id=Auth::user()->id;
         $currentMonth = Carbon::now()->month;
+        $status = Auth::user()->status;
+
+        if ($status == 0) {
+            session()->flash('message', 'আপনাকে এখনো মেসে যুক্ত করেনি,দয়া করে ম্যানেজারের সাথে যোগাযোগ করুন');
+            return redirect()->route('border.dashboard');
+        }
 
     // Retrieve 'borders_mealcharge_deposit' data for the current month
     $bordertotaldeposit = DB::table('payment_details')
@@ -79,12 +85,23 @@ class BorderProfileController extends Controller
     }
 
     public function mealdetails(){
-        $id=Auth::user()->id;
+        $id = Auth::user()->id;
+        $status = Auth::user()->status;
         $currentMonth = Carbon::now()->month;
-        $bordermeals = DB::table('meal')->where('user_id','=',$id)
-        ->whereMonth('date', $currentMonth)->get();
+
+        if ($status == 0) {
+            session()->flash('message', 'আপনাকে এখনো মেসে যুক্ত করেনি,দয়া করে ম্যানেজারের সাথে যোগাযোগ করুন');
+            return redirect()->route('border.dashboard');
+        }
+
+        $bordermeals = DB::table('meal')
+            ->where('user_id', '=', $id)
+            ->whereMonth('date', $currentMonth)
+            ->get();
+
         return view('border.mealdetails', compact('bordermeals'));
     }
+
 
     public function addmeals(Request $request)
     {

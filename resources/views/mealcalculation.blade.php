@@ -49,12 +49,12 @@
                                     <tbody>
                                         @php
                                         $counter = 0;
-                                        $mealcharge = $totalAmount ? number_format(($totalAmount->totalAmount) /
-                                        $counttotalmeal, 2) : 'N/A';
+                                        $mealcharge = $counttotalmeal > 0 ? number_format(($totalAmount->totalAmount) /
+                                        $counttotalmeal, 2) : 0;
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ ++$counter }}</td>
-                                            <td class="text-center">{{ $totalAmount->totalAmount }}</td>
+                                            <td class="text-center">{{ $totalAmount->totalAmount ?? 0 }}</td>
                                             <td class="text-center">{{ $counttotalmeal }}</td>
                                             <td class="text-center">
                                                 {{$mealcharge}}

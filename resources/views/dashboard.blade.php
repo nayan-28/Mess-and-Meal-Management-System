@@ -65,7 +65,7 @@
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <select class="form-select" aria-label="Default select example" name="month"
-                                            style="width: 180px; text-align: center;">
+                                            style="width: 180px; text-align: center;" required>
                                             <option value="" disabled selected>মাস নির্বাচন করুন</option>
                                             @for ($i = 1; $i <= 12; $i++) <option value="{{ $i }}">
                                                 {{ \Carbon\Carbon::createFromDate(null, $i, 1)->format('F') }}

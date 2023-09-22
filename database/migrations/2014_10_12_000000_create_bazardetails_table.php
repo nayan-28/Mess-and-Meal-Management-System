@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('bazardetails', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
+            $table->string('join_key');
             $table->text('bazardetails');
             $table->string('amount');
             $table->date('date');

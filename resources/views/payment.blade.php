@@ -31,7 +31,7 @@
                             <tr>
                                 <form action="{{ route('updatedetails') }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="id" value="{{ $row->id }}">
+                                    <input type="hidden" name="id" value="{{ $row->user_id }}">
                                     <td>{{ ++$counter }}</td>
                                     <td>{{$row->name}}</td>
                                     <td><input type="number" name="house_rent" value="{{$row->house_rent}}"
@@ -46,7 +46,7 @@
                                             class="form-control form-control-sm"></td>
                                     <td>
                                         @foreach($bordertotaldeposit as $deposit)
-                                        @if($deposit->user_id == $row->id)
+                                        @if($deposit->user_id == $row->user_id)
                                         {{$deposit->total_amount}}
                                         @endif
                                         @endforeach
@@ -59,7 +59,7 @@
                                 </form>
                                 <td class="text-center">
                                     <button class="btn btn-primary add-payment-button" type="button" data-toggle="modal"
-                                        data-target="addPaymentModal" value="{{$row->id}}"><b>+</b></button>
+                                        data-target="addPaymentModal" value="{{$row->user_id}}"><b>+</b></button>
                                 </td>
                             </tr>
 
@@ -85,7 +85,7 @@
                                         </div>
 
                                         <!-- Add a hidden input field to store user_id -->
-                                        <input type="hidden" name="user_id" value="{{$row->id}}">
+                                        <input type="hidden" name="user_id" value="{{$row->user_id}}">
 
                                         <!-- Submit button to add the payment -->
                                         <button type="submit" class="btn btn-success">যোগ করুন</button>
