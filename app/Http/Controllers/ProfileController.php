@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -81,18 +83,27 @@ public function approvemember(Request $request)
         $id = [$id]; // Convert to an array if it's not already
     }
 
-    // Update the "status" column in the "borders" table for selected records
-    DB::table("borders")->whereIn('id', $id)->update(['status' => '1']);
-
     $currentDate = Carbon::now();
-
+    $currentMonth = $currentDate->format('Y-m');
     // Insert records into the "payment_details" table for each selected user
     foreach ($id as $userId) {
-        DB::table("payment_details")->insert([
-            'user_id' => $userId,
-            'key' => $key,
-            'date' => $currentDate,
-        ]);
+        // Check if a record already exists for the same user and month
+        $existingRecord = DB::table('payment_details')
+            ->where('user_id', $userId)
+            ->where(DB::raw('DATE_FORMAT(date, "%Y-%m")'), $currentMonth)
+            ->first();
+            if (!$existingRecord) {
+                DB::table("borders")->whereIn('id', $id)->update(['status' => '1']);
+                // Insert a new record if no record exists for the user in the same month
+                DB::table("payment_details")->insert([
+                    'user_id' => $userId,
+                    'key' => $key,
+                    'date' => $currentDate,
+                ]);
+            } else {
+                // Set a message if a record already exists for the user in the same month
+                session()->flash('message', 'এই ব্যবহারকারীকে ইতিমধ্যে যুক্ত করেছেন');
+            }
     }
     return redirect()->back();
 }
@@ -112,20 +123,26 @@ public function oldMember(Request $request)
         $search=$request['search']??"";
         if($search!==""){
             $members = DB::table('borders')
+            ->select('borders.name', 'borders.phone', 'payment_details.user_id', 'payment_details.key')
     ->join('payment_details', 'borders.id', '=', 'payment_details.user_id')
     ->where('borders.status', '=', 1)
     ->where('borders.key', '=', $key)
     ->where('borders.phone', '=', $search)
+    ->distinct('payment_details.user_id') // Add this line to select distinct user_ids
     ->paginate(6);
+
     return view('oldMember', compact('members'));
         }else{
             $members = DB::table('borders')
-    ->select('borders.*', 'payment_details.*')
+    ->select('borders.name', 'borders.phone', 'payment_details.user_id', 'payment_details.key')
     ->join('payment_details', 'borders.id', '=', 'payment_details.user_id')
     ->where('borders.key', '=', $key)
     ->where('borders.status', '=', 1)
+    ->distinct('payment_details.user_id') // Add this line to select distinct user_ids
     ->paginate(6);
-            return view('oldMember', compact('members'));
+
+//dd( $members);
+    return view('oldMember', compact('members'));
 }
 }
 public function removemember(Request $request)
@@ -133,6 +150,9 @@ public function removemember(Request $request)
     $remove = $request->remove;
 
     $users=DB::table("borders")->whereIn('id',$remove)->update(['status'=>'0']);
+    DB::table("payment_details")
+    ->where('user_id', $remove)
+    ->delete();
 
     return redirect()->back();
 
@@ -170,47 +190,71 @@ public function payment(Request $request)
 
 public function updateDetails(Request $request)
 {
-
     $id = $request->input('id');
     $houseRent = $request->input('house_rent');
     $wifiBill = $request->input('wifi_bill');
     $electricBill = $request->input('electric_bill');
     $radhuniBill = $request->input('radhuni_bill');
     $extraBill = $request->input('extra_bill');
+    $currentMonth = Carbon::now()->month;
 
-    // Update the record with the new data using a raw SQL query
-    DB::update('UPDATE payment_details SET
-        house_rent = ?,
-        wifi_bill = ?,
-        electric_bill = ?,
-        radhuni_bill = ?,
-        extra_bill = ?
-        WHERE id = ?',
-        [$houseRent, $wifiBill, $electricBill, $radhuniBill, $extraBill, $id]
-    );
+    // Attempt to update the record
+    $updated = DB::table('payment_details')
+        ->where('user_id', $id)
+        ->whereMonth('date', $currentMonth)
+        ->update([
+            'house_rent' => $houseRent,
+            'wifi_bill' => $wifiBill,
+            'electric_bill' => $electricBill,
+            'radhuni_bill' => $radhuniBill,
+            'extra_bill' => $extraBill,
+        ]);
 
-    return redirect()->back()->with('success', 'Record updated successfully.');
+    if ($updated) {
+        // Data was successfully updated
+        return redirect()->back();
+    } else {
+        // Data update failed
+        return redirect()->back();
+    }
 }
-public function addcurrentmember(Request $request){
+
+
+public function addcurrentmember(Request $request) {
     $key = $request->input('key');
     $id = $request->input('id');
-
 
     if (!is_array($id)) {
         $id = [$id]; // Convert to an array if it's not already
     }
-    $currentDate = Carbon::now();
 
-    // Insert records into the "payment_details" table for each selected user
+    $currentDate = Carbon::now();
+    $currentMonth = $currentDate->format('Y-m');
+
     foreach ($id as $userId) {
-        DB::table("payment_details")->insert([
-            'user_id' => $userId,
-            'key' => $key,
-            'date' => $currentDate,
-        ]);
+        // Check if a record already exists for the same user and month
+        $existingRecord = DB::table('payment_details')
+            ->where('user_id', $userId)
+            ->where(DB::raw('DATE_FORMAT(date, "%Y-%m")'), $currentMonth)
+            ->first();
+
+        if (!$existingRecord) {
+            // Insert a new record if no record exists for the user in the same month
+            DB::table("payment_details")->insert([
+                'user_id' => $userId,
+                'key' => $key,
+                'date' => $currentDate,
+            ]);
+        } else {
+            // Set a message if a record already exists for the user in the same month
+            session()->flash('message', 'এই ব্যবহারকারীকে ইতিমধ্যে যুক্ত করেছেন');
+        }
     }
+
     return redirect()->back();
 }
+
+
 
 public function mealdetails(){
     $currentMonth = Carbon::now()->month;
@@ -415,6 +459,5 @@ $mealdetails = DB::table('meal')
     ->first();
 
         return view('mealcalculation',compact('bordertotaldeposit','mealdetails','totalAmount'));
- //dd($totalAmount);
 }
 }

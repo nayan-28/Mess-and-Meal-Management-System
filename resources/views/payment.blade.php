@@ -101,7 +101,6 @@
         </div>
     </x-slot>
 </x-app-layout>
-
 <style>
 /* The modal (hidden by default) */
 /* Modal container */

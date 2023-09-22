@@ -2,90 +2,106 @@
     <div class="panel-heading">
         <h2 class="text-center mt-3">Mess & Meal Management System</h2>
     </div>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col" class="text-center">S.L</th>
-                <th scope="col" class="text-center">Details</th>
-                <th scope="col" class="text-center">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row" class="text-center">1</th>
-                <td>New Members Request</td>
-                <td class="text-center"><a href="{{ route('newMember')}}" class="btn btn-primary">
-                        View
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="text-center">2</th>
-                <td>Old Members</td>
-                <td class="text-center"><a href="{{ route('oldMember')}}" class="btn btn-secondary">View </a>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="text-center">3</th>
-                <td>Meal & Deposit Management</td>
-                <td class="text-center"><a href="{{route('mealdetails')}}" class="btn btn-success">View
-                    </a> </td>
-            </tr>
-            <tr>
-                <th scope="row" class="text-center">4</th>
-                <td>Payment</td>
-                <td class="text-center"><a href="{{ route('payment')}}" class="btn btn-danger">View </a>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="text-center">5</th>
-                <td>Bazar Information</td>
-                <td class="text-center"><a href="{{ route('bazardetails')}}" class="btn btn-warning">View </a>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row" class="text-center">6</th>
-                <td>Meal Charge Calculation</td>
-                <td class="text-center"><button class="btn btn-success" data-toggle="modal"
-                        data-target="#addPaymentModal">View</button>
-                </td>
-                <!-- Modal -->
-                <div class="modal fade" id="addPaymentModal" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">কোন মাসের হিসাব তৈরি করতে চান?</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form action="{{route('calculation')}}" method="POST">
-                                @csrf
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <select class="form-select" aria-label="Default select example" name="month"
-                                            style="width: 180px; text-align: center;" required>
-                                            <option value="" disabled selected>মাস নির্বাচন করুন</option>
-                                            @for ($i = 1; $i <= 12; $i++) <option value="{{ $i }}">
-                                                {{ \Carbon\Carbon::createFromDate(null, $i, 1)->format('F') }}
-                                                </option>
-                                                @endfor
-                                        </select>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-success text-center">
+                            <tr>
+                                <th scope="col" class="text-center">S.L</th>
+                                <th scope="col" class="text-center">Details</th>
+                                <th scope="col" class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="text-center">1</th>
+                                <td>New Members Request</td>
+                                <td class="text-center"><a href="{{ route('newMember')}}" class="btn btn-primary">
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-center">2</th>
+                                <td>Old Members</td>
+                                <td class="text-center"><a href="{{ route('oldMember')}}" class="btn btn-secondary">View
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-center">3</th>
+                                <td>Meal & Deposit Management</td>
+                                <td class="text-center"><a href="{{route('mealdetails')}}" class="btn btn-success">View
+                                    </a> </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-center">4</th>
+                                <td>Payment</td>
+                                <td class="text-center"><a href="{{ route('payment')}}" class="btn btn-danger">View </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-center">5</th>
+                                <td>Bazar Information</td>
+                                <td class="text-center"><a href="{{ route('bazardetails')}}"
+                                        class="btn btn-warning">View </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-center">6</th>
+                                <td>Meal Charge Calculation</td>
+                                <td class="text-center"><button class="btn btn-success" data-toggle="modal"
+                                        data-target="#addPaymentModal">View</button>
+                                </td>
+                                <!-- Modal -->
+                                <div class="modal fade" id="addPaymentModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">কোন মাসের হিসাব তৈরি করতে
+                                                    চান?
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{{route('calculation')}}" method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <select class="form-select" aria-label="Default select example"
+                                                            name="month" style="width: 180px; text-align: center;"
+                                                            required>
+                                                            <option value="" disabled selected>মাস নির্বাচন করুন
+                                                            </option>
+                                                            @for ($i = 1; $i <= 12; $i++) <option value="{{ $i }}">
+                                                                {{ \Carbon\Carbon::createFromDate(null, $i, 1)->format('F') }}
+                                                                </option>
+                                                                @endfor
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">বন্ধ
+                                                        করুন</button>
+                                                    <button type="submit" class="btn btn-success">হিসাব করুন</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">বন্ধ
-                                        করুন</button>
-                                    <button type="submit" class="btn btn-success">হিসাব করুন</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </tr>
-        </tbody>
-    </table>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
 
 <script>
