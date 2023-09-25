@@ -68,7 +68,7 @@ class ProfileController extends Controller
         if($search!==""){
             $members=DB::table('borders')->where('status','=',0)->where('key','=',$key)->where('phone','=',$search)->get()->paginate(6);
         }else{
-            $members=DB::table('borders')->select('*')->where('key','=',$key)->where('status','=',0)->get()->paginate(6);
+            $members=DB::table('borders')->select('name','phone','key','id')->where('key','=',$key)->where('status','=',0)->get()->paginate(6);
         }
         $users=compact('members','members');
         return view('newMember', compact('members'));
@@ -128,7 +128,7 @@ public function oldMember(Request $request)
     ->where('borders.status', '=', 1)
     ->where('borders.key', '=', $key)
     ->where('borders.phone', '=', $search)
-    ->distinct('payment_details.user_id') // Add this line to select distinct user_ids
+    ->distinct('payment_details.user_id')
     ->paginate(6);
 
     return view('oldMember', compact('members'));

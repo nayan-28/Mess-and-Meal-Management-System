@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +21,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function ()
+{
+    $key=Auth::user()->key;
+    $members=DB::table('borders')->select('name','phone','key')->where('key','=',$key)->where('status','=',0)->get();
+
+    $oldemembers=DB::table('borders')->select('name','phone','key','id')->where('key','=',$key)->where('status','=',1)->get();
+    return view('dashboard',compact('members','oldemembers'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -67,7 +75,23 @@ require __DIR__.'/auth.php';
 
 
 Route::get('/border/dashboard', function () {
-    return view('border.dashboard');
+
+    $id=Auth::user()->id;
+        $currentMonth = Carbon::now()->month;
+        $status = Auth::user()->status;
+
+    $bordertotaldeposit = DB::table('payment_details')
+    ->join('borders_mealcharge_deposit', function ($join) use ($currentMonth) {
+        $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
+             ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
+    })
+    ->where('payment_details.user_id', $id)
+    ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
+    ->groupBy('payment_details.user_id')
+    ->get();
+    $borderPayments = DB::table('payment_details')->where('user_id','=',$id)->get();
+
+    return view('border.dashboard',compact('bordertotaldeposit','borderPayments'));
 })->middleware(['auth:border', 'verified'])->name('border.dashboard');
 
 

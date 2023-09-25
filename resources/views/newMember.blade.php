@@ -34,6 +34,7 @@
                         <tbody>
                             @php
                             $counter = 0;
+                            $counter1 = 0;
                             @endphp
                             @foreach($members as $row)
                             <tr>
@@ -46,7 +47,8 @@
                                     <input type="hidden" name="id" value="{{$row->id}}">
                                     <td>{{$row->key}}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-success" type="submit" name="update">Approve</button>
+                                        <button class="btn btn-success" type="submit" name="update">Approve
+                                        </button>
                                     </td>
                                 </form>
                                 <form action="rejectmember" method="POST"
@@ -167,3 +169,7 @@ window.onload = function() {
     }
 };
 </script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

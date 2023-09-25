@@ -13,7 +13,9 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{ route('login')}}">Login as Manager</a></li>
-                    <li><a class="dropdown-item" href="{{ route('border.login')}}">Login as Border</a></li>
+                    <li>
+                        < a class="dropdown-item" href="{{ route('border.login')}}">Login as Border</>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item dropdown">

@@ -15,18 +15,42 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                            $newbordercounter = 0;
+                            @endphp
                             <tr>
                                 <th scope="row" class="text-center">1</th>
                                 <td>New Members Request</td>
-                                <td class="text-center"><a href="{{ route('newMember')}}" class="btn btn-primary">
+                                <td class="text-center"><a href="{{ route('newMember')}}" class="btn btn-primary"
+                                        style="position: relative;">
                                         View
+                                        @foreach($members as $row)
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{++$newbordercounter}}
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                        @endforeach
                                     </a>
                                 </td>
                             </tr>
                             <tr>
+                                @php
+                                $oldbordercounter = 0;
+                                @endphp
                                 <th scope="row" class="text-center">2</th>
                                 <td>Old Members</td>
-                                <td class="text-center"><a href="{{ route('oldMember')}}" class="btn btn-secondary">View
+                                <td class="text-center">
+                                    <a href="{{ route('oldMember')}}" class="btn btn-secondary"
+                                        style="position: relative;">
+                                        View
+                                        @foreach($oldemembers as $row)
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{++$oldbordercounter}}
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                        @endforeach
                                     </a>
                                 </td>
                             </tr>

@@ -2,6 +2,65 @@
     <div class="panel-heading">
         <h2 class="text-center mt-3">Mess & Meal Management System</h2>
     </div>
+    @foreach($borderPayments as $row)
+    @foreach($bordertotaldeposit as $deposit)
+    @if ($row->house_rent == 0 || $row->wifi_bill == 0 || $row->electric_bill == 0 || $deposit->total_amount == 0)
+    <!-- Generate a unique id for each modal using a variable -->
+    @php
+    $modalId = 'paymentReminder_' . uniqid();
+    @endphp
+
+    <!-- Modal pop-up with a unique id -->
+    <div class="modal fade" id="{{ $modalId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Remove the close button from the modal header -->
+                <div class="modal-header" style="text-align: center;">
+                    <h5 class="modal-title">Payment Reminder</h5>
+                </div>
+                <div class="modal-body">
+                    আপনার টাকা বাকি রয়েছে।দয়া করে দ্রুত পরিশোধ করুন।
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to automatically show the modal only once per session -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        $(window).on('load', function() {
+            var modal = $('#{{ $modalId }}');
+
+            // Check if the modal has been shown in this session
+            var hasModalBeenShown = sessionStorage.getItem('modalShown');
+
+            if (!hasModalBeenShown) {
+                // Show the modal
+                modal.modal('show');
+
+                // Mark the modal as shown in this session
+                sessionStorage.setItem('modalShown', 'true');
+
+                // Automatically hide the modal after 5 seconds (adjust the duration as needed)
+                setTimeout(function() {
+                    modal.modal('hide');
+                }, 5000); // 5000 milliseconds = 5 seconds
+
+                // Once the modal is hidden, remove it from the DOM
+                modal.on('hidden.bs.modal', function() {
+                    modal.remove();
+                });
+            }
+        });
+    });
+    </script>
+
+    </script>
+    @endif
+    @endforeach
+    @endforeach
+
     <div class="container mt-5">
         <div class="card">
             <div class="card-body">
@@ -142,3 +201,7 @@ window.onload = function() {
     }
 };
 </script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
