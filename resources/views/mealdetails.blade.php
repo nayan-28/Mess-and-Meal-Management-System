@@ -1,4 +1,15 @@
 <x-app-layout>
+    @if(session('message'))
+    <div class="alert alert-success" id="success-message">
+        {{ session('message') }}
+    </div>
+
+    <script>
+    setTimeout(function() {
+        document.getElementById('success-message').style.display = 'none';
+    }, 2500);
+    </script>
+    @endif
     <div class="container">
         <div class="card mt-5">
             <div class="card-body">

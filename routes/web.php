@@ -57,6 +57,8 @@ Route::middleware('auth')->group(function () {
     ->name('mealdetails');
     Route::post('history', [ProfileController::class, 'meallist'])
     ->name('meallist');
+    Route::post('updating', [ProfileController::class, 'updatemeallist'])
+    ->name('updatemeallist');
     Route::get('bazardetails', [ProfileController::class, 'bazardetails'])
     ->name('bazardetails');
     Route::post('addingbazar', [ProfileController::class, 'addbazar'])

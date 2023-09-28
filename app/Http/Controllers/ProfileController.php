@@ -322,6 +322,38 @@ public function meallist(Request $request){
     return view('meallist',compact('meallist'));
 }
 }
+
+public function updatemeallist(Request $request){
+    $ids = $request->input('id');
+    $user_ids = $request->input('user_id');
+    $mornings = $request->input('morning');
+    $lunches = $request->input('lunch');
+    $dinners = $request->input('dinner');
+
+    $updated = DB::table('meal')
+    ->where('user_id', $user_ids)
+    ->where('id', $ids)
+    ->update([
+        'morning' => $mornings,
+        'lunch' => $lunches,
+        'dinner' => $dinners,
+    ]);
+
+if ($updated) {
+    // Update was successful
+    $message = 'সফলভাবে আপডেট হয়েছে';
+} else {
+    // Update failed
+    $message = 'কিছু সমস্যা হয়েছে,পুনরায় চেষ্টা করুন';
+}
+
+return redirect()->route('mealdetails')->with('message', $message);
+
+}
+
+
+
+
 public function adddeposit(Request $request){
     // Get the user_id from the request
     $user_id = $request->input('user_id');

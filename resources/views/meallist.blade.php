@@ -27,6 +27,7 @@
                                         <th>দুপুর</th>
                                         <th>রাত</th>
                                         <th>তারিখ</th>
+                                        <th>আপডেট করুন</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -36,11 +37,22 @@
                                     @endphp
                                     @foreach($meallist as $row)
                                     <tr>
-                                        <td class="text-center">{{ ++$counter }}</td>
-                                        <td class="text-center">{{$row->morning}}</td>
-                                        <td class="text-center">{{$row->lunch}}</td>
-                                        <td class="text-center">{{$row->dinner}}</td>
-                                        <td class="text-center">{{$row->date}}</td>
+                                        <form action="{{ route('updatemeallist') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $row->id }}">
+                                            <input type="hidden" name="user_id" value="{{ $row->user_id }}">
+                                            <td class="text-center">{{ ++$counter }}</td>
+                                            <td><input type="number" name="morning" value="{{$row->morning}}"
+                                                    class="form-control form-control-sm"></td>
+                                            <td><input type="number" name="lunch" value="{{$row->lunch}}"
+                                                    class="form-control form-control-sm"></td>
+                                            <td><input type="number" name="dinner" value="{{$row->dinner}}"
+                                                    class="form-control form-control-sm"></td>
+                                            <td class="text-center">{{$row->date}}</td>
+                                            <td class="text-center">
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </td>
+                                        </form>
                                     </tr>
                                     @php
                                     $totalMeals += ($row->morning + $row->lunch + $row->dinner);
@@ -59,7 +71,6 @@
                             </table>
                         </div>
                     </div>
-                    <!-- Table Start -->
                 </div>
             </div>
         </div>
