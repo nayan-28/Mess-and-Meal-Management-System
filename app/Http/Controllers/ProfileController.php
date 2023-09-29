@@ -282,16 +282,21 @@ public function addcurrentmember(Request $request) {
 
 
 
-public function mealdetails(){
+public function mealdetails(Request $request){
     $currentMonth = Carbon::now()->month;
     $key = Auth::user()->key;
+    $month=$request['month']??"";
 
-$mealdetails = DB::table('meal')
-    ->join('payment_details', function ($join) use ($key, $currentMonth) {
+    $hideButtons = true;
+
+    // Check if a specific month is requested
+    if ($month !== "") {
+        $mealdetails = DB::table('meal')
+    ->join('payment_details', function ($join) use ($key, $month) {
         $join->on('meal.user_id', '=', 'payment_details.user_id')
             ->where('payment_details.key', '=', $key)
-            ->whereMonth('payment_details.date', $currentMonth)
-            ->whereMonth('meal.date', $currentMonth);
+            ->whereMonth('payment_details.date', $month)
+            ->whereMonth('meal.date', $month);
     })
     ->join('borders', 'payment_details.user_id', '=', 'borders.id')
     ->select(
@@ -305,14 +310,44 @@ $mealdetails = DB::table('meal')
     ->groupBy('borders.name', 'payment_details.extra_bill') // Group by the user's name and extra_bill
     ->get();
     $bordertotaldeposit = DB::table('payment_details')
-    ->join('borders_mealcharge_deposit', function ($join) use ($currentMonth) {
+    ->join('borders_mealcharge_deposit', function ($join) use ($month) {
         $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-             ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
+             ->whereMonth('borders_mealcharge_deposit.date', $month);
     })
     ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
     ->groupBy('payment_details.user_id')
     ->get();
-return view('mealdetails',compact('mealdetails','bordertotaldeposit'));
+    $hideButtons = false;
+    }
+    else{
+        $mealdetails = DB::table('meal')
+        ->join('payment_details', function ($join) use ($key, $currentMonth) {
+            $join->on('meal.user_id', '=', 'payment_details.user_id')
+                ->where('payment_details.key', '=', $key)
+                ->whereMonth('payment_details.date', $currentMonth)
+                ->whereMonth('meal.date', $currentMonth);
+        })
+        ->join('borders', 'payment_details.user_id', '=', 'borders.id')
+        ->select(
+            'borders.name',
+            'payment_details.extra_bill',
+            DB::raw('MAX(payment_details.user_id) as user_id'),
+            DB::raw('SUM(morning) as total_morning'),
+            DB::raw('SUM(dinner) as total_dinner'),
+            DB::raw('SUM(lunch) as total_lunch')
+        )
+        ->groupBy('borders.name', 'payment_details.extra_bill') // Group by the user's name and extra_bill
+        ->get();
+        $bordertotaldeposit = DB::table('payment_details')
+        ->join('borders_mealcharge_deposit', function ($join) use ($currentMonth) {
+            $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
+                 ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
+        })
+        ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
+        ->groupBy('payment_details.user_id')
+        ->get();
+    }
+return view('mealdetails',compact('mealdetails','bordertotaldeposit','hideButtons'));
 
 }
 
@@ -393,11 +428,30 @@ $user_id = $request->input('user_id');
     return redirect()->back();
 }
 
-public function bazardetails(){
+public function bazardetails(Request $request){
     $currentMonth = Carbon::now()->month;
     $key = Auth::user()->key;
+    $hideButtons = true;
+
+    $month=$request['month']??"";
     // Retrieve payment details for 'borders' in the current month
-    $border = DB::table('borders')
+
+    if ($month !== "") {
+        $border = DB::table('borders')
+        ->join('payment_details', function ($join) {
+            $join->on('borders.key', '=', 'payment_details.key')
+                 ->on('borders.id', '=', 'payment_details.user_id');
+        })
+        ->where('borders.status', 1)
+        ->where('payment_details.key',$key)
+        ->whereMonth('payment_details.date', $month)
+        ->select('borders.name','borders.id')
+        ->get();
+
+        $bazardetails = DB::table('bazardetails')->select('*')->where('join_key',$key)->whereMonth('date' ,'=', $month)->get();
+        $hideButtons = false;
+    }else{
+        $border = DB::table('borders')
         ->join('payment_details', function ($join) {
             $join->on('borders.key', '=', 'payment_details.key')
                  ->on('borders.id', '=', 'payment_details.user_id');
@@ -409,7 +463,9 @@ public function bazardetails(){
         ->get();
 
         $bazardetails = DB::table('bazardetails')->select('*')->where('join_key',$key)->whereMonth('date' ,'=', $currentMonth)->get();
-    return view('bazardetails',compact('border','bazardetails'));
+    }
+
+    return view('bazardetails',compact('border','bazardetails','hideButtons'));
 }
 
 public function addbazar(Request $request)

@@ -74,6 +74,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr></tr>
                             <tr>
                                 <th scope="row" class="text-center">1</th>
                                 <td>Meal Details</td>

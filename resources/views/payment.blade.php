@@ -40,7 +40,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">বন্ধ
                                     করুন</button>
-                                <button type="submit" class="btn btn-success">হিসাব করুন</button>
+                                <button type="submit" class="btn btn-success">দেখুন</button>
                             </div>
                         </form>
                     </div>
@@ -95,7 +95,7 @@
                                     </td>
 
                                     <td class="text-center">
-                                        <button class="btn btn-primary" type="submit" name="update">Update</button>
+                                        <button class="btn btn-primary" type="submit" name="update">✓</button>
                                     </td>
 
                                 </form>
@@ -148,9 +148,16 @@
             </div>
             <!-- Table End -->
         </div>
+        <div style="text-align: center;">
+            <button onclick="printContent()" class="btn btn-warning">Print</button>
+        </div>
     </x-slot>
 </x-app-layout>
-
+<script>
+function printContent() {
+    window.print();
+}
+</script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

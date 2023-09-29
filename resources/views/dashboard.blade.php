@@ -18,6 +18,7 @@
                             @php
                             $newbordercounter = 0;
                             @endphp
+                            <tr></tr>
                             <tr>
                                 <th scope="row" class="text-center">1</th>
                                 <td>New Members Request</td>

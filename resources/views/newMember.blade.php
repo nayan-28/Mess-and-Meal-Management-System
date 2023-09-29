@@ -47,7 +47,7 @@
                                     <input type="hidden" name="id" value="{{$row->id}}">
                                     <td>{{$row->key}}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-success" type="submit" name="update">Approve
+                                        <button class="btn btn-success" type="submit" name="update">✓
                                         </button>
                                     </td>
                                 </form>
@@ -56,7 +56,7 @@
                                     @csrf
                                     <td class="text-center">
                                         <button class="btn btn-danger" type="submit" name="delete[{{$row->id}}]"
-                                            value="{{$row->id}}" />Reject</button>
+                                            value="{{$row->id}}" />✗</button>
                                     </td>
                                 </form>
                             </tr>

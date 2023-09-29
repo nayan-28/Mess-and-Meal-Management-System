@@ -36,7 +36,7 @@
                             $counter = 0;
                             $currentMonth = date('Y-m');
                             @endphp
-
+                            <tr></tr>
                             @foreach($members as $row)
                             <tr>
                                 <td>{{ ++$counter }}</td>
@@ -48,7 +48,7 @@
                                     @csrf
                                     <td class="text-center">
                                         <button class="btn btn-danger" type="submit" name="remove[{{$row->user_id}}]"
-                                            value="{{$row->user_id}}">Remove</button>
+                                            value="{{$row->user_id}}">✗</button>
                                     </td>
                                 </form>
 
@@ -58,7 +58,7 @@
                                     <input type="hidden" name="id" value="{{$row->user_id}}">
                                     <td class="text-center">
                                         <button class="btn btn-success" type="submit" name="update">
-                                            Add
+                                            ✓
                                         </button>
                                     </td>
                                 </form>

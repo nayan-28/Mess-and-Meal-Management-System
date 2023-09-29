@@ -9,6 +9,49 @@
                     <h4>বাঁজার তালিকা</h4>
                     <p class="card-text">{{ \Carbon\Carbon::now()->format('F Y') }}</p>
                 </div>
+                <div class="panel-heading" style="text-align: center;">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#bazardetailsmonth">অন্য মাসের
+                        বাঁজার
+                        তালিকা
+                        দেখুন</button>
+                </div><br>
+                <!-- Modal -->
+                <div class="modal fade" id="bazardetailsmonth" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">কোন মাসের বাঁজার
+                                    তালিকা দেখতে চান?
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form>
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <select class="form-select" aria-label="Default select example" name="month"
+                                            style="width: 180px; text-align: center;" required>
+                                            <option value="" disabled selected>মাস নির্বাচন করুন
+                                            </option>
+                                            @for ($i = 1; $i <= 12; $i++) <option value="{{ $i }}">
+                                                {{ \Carbon\Carbon::createFromDate(null, $i, 1)->format('F') }}
+                                                </option>
+                                                @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">বন্ধ
+                                        করুন</button>
+                                    <button type="submit" class="btn btn-success">দেখুন</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <div class="row justify-content-center">
                     <!-- Table Start -->
                     <div class="table-container">
@@ -50,8 +93,11 @@
                                         <td class="text-center"><b>{{$totalcosts}}</b> টাকা</td>
                                         <td></td>
                                         <td></td>
+                                        @if($hideButtons)
                                         <th>যোগ করুন</th>
+                                        @endif
                                     </tr>
+                                    @if($hideButtons)
                                     <tr>
                                         <form action="{{route('addbazar')}}" method="POST">
                                             @csrf
@@ -72,17 +118,29 @@
                                                 </select>
                                             </td>
                                             <td class="text-center">
-                                                <button class="btn btn-primary" type="submit" name="addbazar">+</button>
+                                                <button class="btn btn-primary" type="submit" name="addbazar">✓</button>
                                             </td>
                                         </form>
                                     </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <!-- Table Start -->
                 </div>
+                <div style="text-align: center;">
+                    <button onclick="printContent()" class="btn btn-warning">Print</button>
+                </div>
             </div>
         </div>
     </div>
 </x-app-layout>
+<script>
+function printContent() {
+    window.print();
+}
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

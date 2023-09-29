@@ -50,7 +50,7 @@
                                                     class="form-control form-control-sm"></td>
                                             <td class="text-center">{{$row->date}}</td>
                                             <td class="text-center">
-                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                <button type="submit" class="btn btn-primary">✓</button>
                                             </td>
                                         </form>
                                     </tr>
