@@ -5,6 +5,47 @@
                 <h2 class="text-center mt-3">টাকা জমার বিবরণী</h2>
                 <p class="text-center mt-3">{{ \Carbon\Carbon::now()->format('F Y') }}</p>
             </div>
+            <div class="panel-heading" style="text-align: center;">
+                <button class="btn btn-success" data-toggle="modal" data-target="#paymentmonth">অন্য মাসের পেমেন্ট
+                    দেখুন</button>
+            </div><br>
+            <!-- Modal -->
+            <div class="modal fade" id="paymentmonth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">কোন মাসের হিসাব দেখতে
+                                চান?
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form>
+                            @csrf
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <select class="form-select" aria-label="Default select example" name="month"
+                                        style="width: 180px; text-align: center;" required>
+                                        <option value="" disabled selected>মাস নির্বাচন করুন
+                                        </option>
+                                        @for ($i = 1; $i <= 12; $i++) <option value="{{ $i }}">
+                                            {{ \Carbon\Carbon::createFromDate(null, $i, 1)->format('F') }}
+                                            </option>
+                                            @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">বন্ধ
+                                    করুন</button>
+                                <button type="submit" class="btn btn-success">হিসাব করুন</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <!-- Table Start -->
             <div>
                 <div class="table-responsive">
@@ -27,6 +68,7 @@
                             @php
                             $counter = 0;
                             @endphp
+                            <tr></tr>
                             @foreach($borderPayments as $row)
                             <tr>
                                 <form action="{{ route('updatedetails') }}" method="POST">
@@ -59,37 +101,44 @@
                                 </form>
                                 <td class="text-center">
                                     <button class="btn btn-primary add-payment-button" type="button" data-toggle="modal"
-                                        data-target="addPaymentModal" value="{{$row->user_id}}"><b>+</b></button>
+                                        data-target="#addPaymentModal{{$row->user_id}}"><b>+</b></button>
                                 </td>
                             </tr>
 
                             <!-- Add Payment Modal -->
-                            <!-- The pop-up/modal container -->
-                            <div id="addPaymentModal" class="modal">
-                                <div class="modal-content">
-                                    <span class="close">&times;</span>
-                                    <h3 class="modal-title">খাবার বাবদ জমা করুন</h3>
-                                    <!-- Form to enter Name, Amount, and Date -->
-                                    <form action="{{ route('adddeposit') }}" method="POST">
-                                        @csrf
-                                        <!-- Input fields for Name, Amount, and Date -->
-                                        <div class="form-group">
-                                            <label for="amount">টাকা</label>
-                                            <input type="number" name="amount" placeholder="Amount"
-                                                class="form-control form-control-sm" required>
+                            <div class="modal fade" id="addPaymentModal{{$row->user_id}}" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">খাবার বাবদ জমা করুন</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="date">তারিখ</label>
-                                            <input type="date" name="date" class="form-control form-control-sm"
-                                                required>
-                                        </div>
-
-                                        <!-- Add a hidden input field to store user_id -->
-                                        <input type="hidden" name="user_id" value="{{$row->user_id}}">
-
-                                        <!-- Submit button to add the payment -->
-                                        <button type="submit" class="btn btn-success">যোগ করুন</button>
-                                    </form>
+                                        <form action="{{ route('adddeposit') }}" method="POST">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="amount">টাকা</label>
+                                                    <input type="number" name="amount" placeholder="Amount"
+                                                        class="form-control form-control-sm" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="date">তারিখ</label>
+                                                    <input type="date" name="date" class="form-control form-control-sm"
+                                                        required>
+                                                </div>
+                                                <!-- Add a hidden input field to store user_id -->
+                                                <input type="hidden" name="user_id" value="{{$row->user_id}}">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">বন্ধ করুন</button>
+                                                <button type="submit" class="btn btn-success">যোগ করুন</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                             @endforeach
@@ -101,110 +150,8 @@
         </div>
     </x-slot>
 </x-app-layout>
-<style>
-/* The modal (hidden by default) */
-/* Modal container */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.7);
-}
 
-/* Modal content */
-.modal-content {
-    background-color: #fff;
-    margin: 10% auto;
-    padding: 20px;
-    border: none;
-    width: 50%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    position: relative;
-}
-
-/* Close button for the modal */
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: #aaa;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: #333;
-}
-
-/* Modal title */
-.modal-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-/* Form inputs */
-.form-group {
-    margin-bottom: 15px;
-}
-
-/* Submit button */
-.btn-success {
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.btn-success:hover {
-    background-color: #45a049;
-}
-</style>
-
-<script>
-// Get the modal element
-var modal = document.getElementById('addPaymentModal');
-
-// Get all buttons with class "add-payment-button"
-var addPaymentButtons = document.querySelectorAll('.add-payment-button');
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName('close')[0];
-
-// Function to open the modal when an "Add" button is clicked
-// Function to open the modal when an "Add" button is clicked
-addPaymentButtons.forEach(function(button) {
-    button.onclick = function() {
-        // Get the user_id from the button's value attribute
-        var userId = button.value;
-
-        // Set the user_id in the hidden input field within the modal form
-        var modalUserIdInput = modal.querySelector('input[name="user_id"]');
-        modalUserIdInput.value = userId;
-
-        // Display the modal
-        modal.style.display = 'block';
-    }
-});
-
-// Function to close the modal when the close button is clicked
-span.onclick = function() {
-    modal.style.display = 'none';
-}
-
-// Function to close the modal when clicking outside of it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = 'none';
-    }
-}
-</script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

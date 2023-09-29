@@ -162,31 +162,57 @@ public function payment(Request $request)
     // Get the current month
     $currentMonth = Carbon::now()->month;
     $key = Auth::user()->key;
-    // Retrieve payment details for 'borders' in the current month
-    $borderPayments = DB::table('borders')
-        ->join('payment_details', function ($join) {
-            $join->on('borders.key', '=', 'payment_details.key')
-                 ->on('borders.id', '=', 'payment_details.user_id');
-        })
-        ->where('borders.status', 1)
-        ->where('payment_details.key', $key)
-        ->whereMonth('payment_details.date', $currentMonth)
-        ->select('borders.name','borders.id', 'payment_details.*')
-        ->get();
+    $month=$request['month']??"";
+    // Check if a specific month is requested
+    if ($month !== "") {
+        $borderPayments = DB::table('borders')
+            ->join('payment_details', function ($join) {
+                $join->on('borders.key', '=', 'payment_details.key')
+                    ->on('borders.id', '=', 'payment_details.user_id');
+            })
+            ->where('borders.status', 1)
+            ->where('payment_details.key', $key)
+            ->whereMonth('payment_details.date', $month)
+            ->select('borders.name','borders.id', 'payment_details.*')
+            ->get();
 
-    // Retrieve 'borders_mealcharge_deposit' data for the current month
-    $bordertotaldeposit = DB::table('payment_details')
-    ->join('borders_mealcharge_deposit', function ($join) use ($currentMonth) {
-        $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-             ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
-    })
-    ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
-    ->groupBy('payment_details.user_id')
-    ->get();
+        // Retrieve 'borders_mealcharge_deposit' data for the specified month
+        $bordertotaldeposit = DB::table('payment_details')
+            ->join('borders_mealcharge_deposit', function ($join) use ($month) {
+                $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
+                    ->whereMonth('borders_mealcharge_deposit.date', $month);
+            })
+            ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
+            ->groupBy('payment_details.user_id')
+            ->get();
+    } else {
+        // Retrieve payment details for 'borders' in the current month
+        $borderPayments = DB::table('borders')
+            ->join('payment_details', function ($join) {
+                $join->on('borders.key', '=', 'payment_details.key')
+                    ->on('borders.id', '=', 'payment_details.user_id');
+            })
+            ->where('borders.status', 1)
+            ->where('payment_details.key', $key)
+            ->whereMonth('payment_details.date', $currentMonth)
+            ->select('borders.name','borders.id', 'payment_details.*')
+            ->get();
+
+        // Retrieve 'borders_mealcharge_deposit' data for the current month
+        $bordertotaldeposit = DB::table('payment_details')
+            ->join('borders_mealcharge_deposit', function ($join) use ($currentMonth) {
+                $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
+                    ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
+            })
+            ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
+            ->groupBy('payment_details.user_id')
+            ->get();
+    }
 
     // Pass the data to the 'payment' view
     return view('payment', compact('borderPayments', 'bordertotaldeposit'));
 }
+
 
 public function updateDetails(Request $request)
 {
@@ -356,7 +382,7 @@ return redirect()->route('mealdetails')->with('message', $message);
 
 public function adddeposit(Request $request){
     // Get the user_id from the request
-    $user_id = $request->input('user_id');
+$user_id = $request->input('user_id');
     $amount = $request->amount;
     $date = $request->date;
     DB::table("borders_mealcharge_deposit")->insert([
