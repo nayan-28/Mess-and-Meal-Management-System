@@ -77,7 +77,7 @@
                             <tr></tr>
                             <tr>
                                 <th scope="row" class="text-center">1</th>
-                                <td>Meal Details</td>
+                                <td>মিলের বিস্তারিত</td>
                                 <td class="text-center"><a href="{{ route('border.mealdetails')}}"
                                         class="btn btn-primary">
                                         View
@@ -86,17 +86,11 @@
                             </tr>
                             <tr>
                                 <th scope="row" class="text-center">2</th>
-                                <td>Payment Details</td>
+                                <td>পেমেন্টের বিস্তারিত</td>
                                 <td class="text-center"><a href="{{ route('border.paymentdetails')}}"
-                                        class=" btn btn-secondary">View
+                                        class=" btn btn-warning">View
                                     </a>
                                 </td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-center">3</th>
-                                <td>Meal & Others Information</td>
-                                <td class="text-center"><a href="#" class="btn btn-success">View
-                                    </a> </td>
                             </tr>
                         </tbody>
                     </table>

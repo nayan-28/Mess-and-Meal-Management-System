@@ -1,6 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="container">
+            <div>
+                <a href="{{route('dashboard') }}" class="btn btn-warning">Back</a>
+            </div>
             <div class="panel-heading">
                 <h2 class="text-center mt-3">টাকা জমার বিবরণী</h2>
                 <p class="text-center mt-3">{{ \Carbon\Carbon::now()->format('F Y') }}</p>

@@ -3,7 +3,12 @@
         <div class="card mt-5">
             <div class="card-body">
                 <div>
-                    <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
+                    <a href="{{route('dashboard') }}" class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square-fill"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+                        </svg></a>
                 </div>
                 <div class="text-center">
                     <h4>বাঁজার তালিকা</h4>
@@ -64,6 +69,7 @@
                                         <th>টাকার পরিমাণ</th>
                                         <th>তারিখ</th>
                                         <th>বাজারকারী</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,6 +88,7 @@
                                             {{$borderRow->name}}
                                             @endif
                                             @endforeach</td>
+                                        <td></td>
                                     </tr>
                                     @php
                                     $totalcosts += ($row ->amount);
@@ -111,7 +118,7 @@
                                             <td>
                                                 <select class="form-select" aria-label="Default select example"
                                                     name="id" required>
-                                                    <option value="">নির্বাচন করুন</option>
+                                                    <option value="" disabled selected>নির্বাচন করুন</option>
                                                     @foreach($border as $bordername)
                                                     <option value="{{$bordername->id}}">{{$bordername->name}}</option>
                                                     @endforeach
