@@ -173,6 +173,7 @@ public function payment(Request $request)
             ->where('borders.status', 1)
             ->where('payment_details.key', $key)
             ->whereMonth('payment_details.date', $month)
+            ->whereYear('payment_details.date', now()->year)
             ->select('borders.name','borders.id', 'payment_details.*')
             ->get();
 
@@ -180,7 +181,8 @@ public function payment(Request $request)
         $bordertotaldeposit = DB::table('payment_details')
             ->join('borders_mealcharge_deposit', function ($join) use ($month) {
                 $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-                    ->whereMonth('borders_mealcharge_deposit.date', $month);
+                    ->whereMonth('borders_mealcharge_deposit.date', $month)
+                    ->whereYear('borders_mealcharge_deposit.date', now()->year);
             })
             ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
             ->groupBy('payment_details.user_id')
@@ -195,6 +197,7 @@ public function payment(Request $request)
             ->where('borders.status', 1)
             ->where('payment_details.key', $key)
             ->whereMonth('payment_details.date', $currentMonth)
+            ->whereYear('payment_details.date', now()->year)
             ->select('borders.name','borders.id', 'payment_details.*')
             ->get();
 
@@ -202,7 +205,8 @@ public function payment(Request $request)
         $bordertotaldeposit = DB::table('payment_details')
             ->join('borders_mealcharge_deposit', function ($join) use ($currentMonth) {
                 $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-                    ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
+                    ->whereMonth('borders_mealcharge_deposit.date', $currentMonth)
+                    ->whereYear('borders_mealcharge_deposit.date', now()->year);
             })
             ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
             ->groupBy('payment_details.user_id')
@@ -296,7 +300,8 @@ public function mealdetails(Request $request){
         $join->on('meal.user_id', '=', 'payment_details.user_id')
             ->where('payment_details.key', '=', $key)
             ->whereMonth('payment_details.date', $month)
-            ->whereMonth('meal.date', $month);
+            ->whereMonth('meal.date', $month)
+            ->whereYear('meal.date', now()->year);
     })
     ->join('borders', 'payment_details.user_id', '=', 'borders.id')
     ->select(
@@ -312,7 +317,8 @@ public function mealdetails(Request $request){
     $bordertotaldeposit = DB::table('payment_details')
     ->join('borders_mealcharge_deposit', function ($join) use ($month) {
         $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-             ->whereMonth('borders_mealcharge_deposit.date', $month);
+             ->whereMonth('borders_mealcharge_deposit.date', $month)
+             ->whereYear('borders_mealcharge_deposit.date', now()->year);
     })
     ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
     ->groupBy('payment_details.user_id')
@@ -325,7 +331,8 @@ public function mealdetails(Request $request){
             $join->on('meal.user_id', '=', 'payment_details.user_id')
                 ->where('payment_details.key', '=', $key)
                 ->whereMonth('payment_details.date', $currentMonth)
-                ->whereMonth('meal.date', $currentMonth);
+                ->whereMonth('meal.date', $currentMonth)
+                ->whereYear('meal.date', now()->year);
         })
         ->join('borders', 'payment_details.user_id', '=', 'borders.id')
         ->select(
@@ -341,7 +348,8 @@ public function mealdetails(Request $request){
         $bordertotaldeposit = DB::table('payment_details')
         ->join('borders_mealcharge_deposit', function ($join) use ($currentMonth) {
             $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-                 ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
+                 ->whereMonth('borders_mealcharge_deposit.date', $currentMonth)
+                 ->whereYear('borders_mealcharge_deposit.date', now()->year);
         })
         ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
         ->groupBy('payment_details.user_id')
@@ -361,7 +369,8 @@ public function meallist(Request $request){
     ->join('payment_details', function ($join) use ($currentMonth,$user_id) {
         $join->on('borders_mealcharge_deposit.user_id', '=', 'payment_details.user_id')
             ->where('borders_mealcharge_deposit.user_id', '=', $user_id)
-            ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
+            ->whereMonth('borders_mealcharge_deposit.date', $currentMonth)
+            ->whereYear('borders_mealcharge_deposit.date', now()->year);
     })
     ->select('borders_mealcharge_deposit.*')
     ->get();
@@ -374,7 +383,8 @@ public function meallist(Request $request){
         $join->on('meal.user_id', '=', 'payment_details.user_id')
             ->where('payment_details.key', '=', $key)
             ->where('payment_details.user_id', '=', $user_id)
-            ->whereMonth('payment_details.date', $currentMonth);
+            ->whereMonth('payment_details.date', $currentMonth)
+            ->whereYear('payment_details.date', now()->year);
     })
     ->join('borders', 'payment_details.user_id', '=', 'borders.id')
     ->select('meal.*','borders.name')
@@ -445,10 +455,11 @@ public function bazardetails(Request $request){
         ->where('borders.status', 1)
         ->where('payment_details.key',$key)
         ->whereMonth('payment_details.date', $month)
+        ->whereYear('payment_details.date', now()->year)
         ->select('borders.name','borders.id')
         ->get();
 
-        $bazardetails = DB::table('bazardetails')->select('*')->where('join_key',$key)->whereMonth('date' ,'=', $month)->get();
+        $bazardetails = DB::table('bazardetails')->select('*')->where('join_key',$key)->whereMonth('date' ,'=', $month)->whereYear('date', now()->year)->get();
         $hideButtons = false;
     }else{
         $border = DB::table('borders')
@@ -459,10 +470,11 @@ public function bazardetails(Request $request){
         ->where('borders.status', 1)
         ->where('payment_details.key',$key)
         ->whereMonth('payment_details.date', $currentMonth)
+        ->whereYear('payment_details.date', now()->year)
         ->select('borders.name','borders.id')
         ->get();
 
-        $bazardetails = DB::table('bazardetails')->select('*')->where('join_key',$key)->whereMonth('date' ,'=', $currentMonth)->get();
+        $bazardetails = DB::table('bazardetails')->select('*')->where('join_key',$key)->whereMonth('date' ,'=', $currentMonth)->whereYear('date', now()->year)->get();
     }
 
     return view('bazardetails',compact('border','bazardetails','hideButtons'));
@@ -544,7 +556,8 @@ $mealdetails = DB::table('meal')
     ->join('payment_details', function ($join) use ($key, $month) {
         $join->on('meal.user_id', '=', 'payment_details.user_id')
             ->where('payment_details.key', '=', $key)
-            ->whereMonth('payment_details.date', $month);
+            ->whereMonth('payment_details.date', $month)
+            ->whereYear('payment_details.date', now()->year);
     })
     ->join('borders', 'payment_details.user_id', '=', 'borders.id')
     ->select(
@@ -560,7 +573,8 @@ $mealdetails = DB::table('meal')
     $bordertotaldeposit = DB::table('payment_details')
     ->join('borders_mealcharge_deposit', function ($join) use ($month) {
         $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-             ->whereMonth('borders_mealcharge_deposit.date', $month);
+             ->whereMonth('borders_mealcharge_deposit.date', $month)
+             ->whereYear('borders_mealcharge_deposit.date', now()->year);
     })
     ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
     ->groupBy('payment_details.user_id')
@@ -570,6 +584,7 @@ $mealdetails = DB::table('meal')
     ->select(DB::raw('SUM(amount) as totalAmount'))
     ->where('join_key', '=', $key)
     ->whereMonth('date', '=', $month)
+    ->whereYear('date', now()->year)
     ->first();
 
         return view('mealcalculation',compact('bordertotaldeposit','mealdetails','totalAmount'));

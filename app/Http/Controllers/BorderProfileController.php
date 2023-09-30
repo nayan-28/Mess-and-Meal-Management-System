@@ -77,7 +77,8 @@ class BorderProfileController extends Controller
             ->join('payment_details', function ($join) use ($key, $month) {
                 $join->on('meal.user_id', '=', 'payment_details.user_id')
                     ->where('payment_details.key', '=', $key)
-                    ->whereMonth('payment_details.date', $month);
+                    ->whereMonth('payment_details.date', $month)
+                    ->whereYear('payment_details.date', now()->year);
             })
             ->join('borders', 'payment_details.user_id', '=', 'borders.id')
             ->select(
@@ -95,13 +96,15 @@ class BorderProfileController extends Controller
         ->select(DB::raw('SUM(amount) as totalAmount'))
         ->where('join_key', '=', $key)
         ->whereMonth('date', '=', $month)
+        ->whereYear('date', now()->year)
         ->first();
 
         // Retrieve 'borders_mealcharge_deposit' data for the current month
         $bordertotaldeposit = DB::table('payment_details')
         ->join('borders_mealcharge_deposit', function ($join) use ($month) {
             $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-                 ->whereMonth('borders_mealcharge_deposit.date', $month);
+                 ->whereMonth('borders_mealcharge_deposit.date', $month)
+                 ->whereYear('borders_mealcharge_deposit.date', now()->year);
         })
         ->where('payment_details.user_id', $id)
         ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
@@ -112,13 +115,15 @@ class BorderProfileController extends Controller
         $bordermeals = DB::table('meal')
         ->where('user_id', '=', $id)
         ->whereMonth('date', $month)
+        ->whereYear('date', now()->year)
         ->get();
         }else{
             $mealdetails = DB::table('meal')
             ->join('payment_details', function ($join) use ($key, $currentMonth) {
                 $join->on('meal.user_id', '=', 'payment_details.user_id')
                     ->where('payment_details.key', '=', $key)
-                    ->whereMonth('payment_details.date', $currentMonth);
+                    ->whereMonth('payment_details.date', $currentMonth)
+                    ->whereYear('payment_details.date', now()->year);
             })
             ->join('borders', 'payment_details.user_id', '=', 'borders.id')
             ->select(
@@ -136,13 +141,15 @@ class BorderProfileController extends Controller
         ->select(DB::raw('SUM(amount) as totalAmount'))
         ->where('join_key', '=', $key)
         ->whereMonth('date', '=', $currentMonth)
+        ->whereYear('date', now()->year)
         ->first();
 
         // Retrieve 'borders_mealcharge_deposit' data for the current month
         $bordertotaldeposit = DB::table('payment_details')
         ->join('borders_mealcharge_deposit', function ($join) use ($currentMonth) {
             $join->on('payment_details.user_id', '=', 'borders_mealcharge_deposit.user_id')
-                 ->whereMonth('borders_mealcharge_deposit.date', $currentMonth);
+                 ->whereMonth('borders_mealcharge_deposit.date', $currentMonth)
+                 ->whereYear('borders_mealcharge_deposit.date', now()->year);
         })
         ->where('payment_details.user_id', $id)
         ->select('payment_details.user_id', DB::raw('SUM(borders_mealcharge_deposit.amount) as total_amount'))
@@ -153,6 +160,7 @@ class BorderProfileController extends Controller
         $bordermeals = DB::table('meal')
         ->where('user_id', '=', $id)
         ->whereMonth('date', $currentMonth)
+        ->whereYear('date', now()->year)
         ->get();
         }
 
@@ -174,12 +182,14 @@ class BorderProfileController extends Controller
         $bordermeals = DB::table('meal')
             ->where('user_id', '=', $id)
             ->whereMonth('date', $month)
+            ->whereYear('date', now()->year)
             ->get();
             $hideButtons = false;
         }else{
             $bordermeals = DB::table('meal')
             ->where('user_id', '=', $id)
             ->whereMonth('date', $currentMonth)
+            ->whereYear('date', now()->year)
             ->get();
         }
         return view('border.mealdetails', compact('bordermeals','hideButtons'));
