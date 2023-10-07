@@ -20,7 +20,8 @@ use Carbon\Carbon;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('home', [ProfileController::class, 'home'])
+    ->name('home');
 Route::get('/dashboard', function ()
 {
     $key=Auth::user()->key;
@@ -55,6 +56,8 @@ Route::middleware('auth')->group(function () {
     ->name('addcurrentmember');
     Route::get('mealdetails', [ProfileController::class, 'mealdetails'])
     ->name('mealdetails');
+    Route::get('mealcalender', [ProfileController::class, 'mealcalender'])
+    ->name('mealcalender');
     Route::post('history', [ProfileController::class, 'meallist'])
     ->name('meallist');
     Route::post('updating', [ProfileController::class, 'updatemeallist'])
@@ -67,7 +70,6 @@ Route::middleware('auth')->group(function () {
     ->name('mealcalculation');
     Route::post('calculation', [ProfileController::class, 'calculation'])
     ->name('calculation');
-
 });
 
 require __DIR__.'/auth.php';

@@ -1,4 +1,17 @@
 <x-app-layout>
+    @php
+    $totals = [];
+    @endphp
+    @foreach($bordertotaldeposit as $deposit)
+    @php
+    $user_id = $deposit->user_id;
+    $amount = $deposit->amount;
+    if (!isset($totals[$user_id])) {
+    $totals[$user_id] = 0;
+    }
+    $totals[$user_id] += $amount;
+    @endphp
+    @endforeach
     @if(session('message'))
     <div class="alert alert-success" id="success-message">
         {{ session('message') }}
@@ -23,7 +36,14 @@
                 </div>
                 <div class="text-center">
                     <h2 class="card-title">Meal Details</h2>
-                    <p class="card-text">{{ \Carbon\Carbon::now()->format('F Y') }}</p>
+                    @if($hideButtons)<p class="card-text">{{ \Carbon\Carbon::now()->format('F Y') }}</p>@endif
+                    @if($hidedate)
+                    @php
+                    $carbon = \Carbon\Carbon::create()->month($month);
+                    $monthName = $carbon->format('F');
+                    @endphp
+                    <h5>{{ $monthName }}</h5>
+                    @endif
                 </div>
                 <div class="panel-heading" style="text-align: center;">
                     <button class="btn btn-success" data-toggle="modal" data-target="#bazardetailsmonth">অন্য মাসের
@@ -97,9 +117,9 @@
                                             <td>{{$row->name}}</td>
                                             <td class="text-center">
                                                 {{$row->total_morning + $row->total_lunch +$row->total_dinner}}</td>
-                                            <td class="text-center">@foreach($bordertotaldeposit as $deposit)
-                                                @if($deposit->user_id == $row->user_id)
-                                                {{$deposit->total_amount}}
+                                            <td class="text-center">@foreach($totals as $user_id => $total)
+                                                @if($user_id == $row->user_id)
+                                                {{$total}}
                                                 @endif
                                                 @endforeach</td>
                                             @if($hideButtons)

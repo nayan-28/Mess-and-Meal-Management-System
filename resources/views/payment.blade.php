@@ -1,12 +1,38 @@
 <x-app-layout>
+    @php
+    $totals = [];
+    @endphp
+
+    @foreach($bordertotaldeposit as $deposit)
+    @php
+    $user_id = $deposit->user_id;
+    $amount = $deposit->amount;
+    if (!isset($totals[$user_id])) {
+    $totals[$user_id] = 0;
+    }
+    $totals[$user_id] += $amount;
+    @endphp
+    @endforeach
     <x-slot name="header">
         <div class="container">
             <div>
-                <a href="{{route('dashboard') }}" class="btn btn-warning">Back</a>
+                <a href="{{route('dashboard') }}" class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square-fill"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+                    </svg></a>
             </div>
-            <div class="panel-heading">
-                <h2 class="text-center mt-3">টাকা জমার বিবরণী</h2>
-                <p class="text-center mt-3">{{ \Carbon\Carbon::now()->format('F Y') }}</p>
+            <div class="text-center">
+                <h4 class="text-center mt-3">টাকা জমার বিবরণী</h4>
+                @if($hideButtons)<p class="card-text">{{ \Carbon\Carbon::now()->format('F Y') }}</p>@endif
+                @if($hidedate)
+                @php
+                $carbon = \Carbon\Carbon::create()->month($month);
+                $monthName = $carbon->format('F');
+                @endphp
+                <h5>{{ $monthName }}</h5>
+                @endif
             </div>
             <div class="panel-heading" style="text-align: center;">
                 <button class="btn btn-success" data-toggle="modal" data-target="#paymentmonth">অন্য মাসের পেমেন্ট
@@ -63,8 +89,10 @@
                                 <th>রাধুনী বিল</th>
                                 <th>অতিরিক্ত</th>
                                 <th>খাবার বাবদ জমা</th>
+                                @if($hideButtons)
                                 <th>আপডেট</th>
                                 <th>খাবার বাবদ জমা করুন</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -79,24 +107,49 @@
                                     <input type="hidden" name="id" value="{{ $row->user_id }}">
                                     <td>{{ ++$counter }}</td>
                                     <td>{{$row->name}}</td>
+                                    @if($hideButtons)
                                     <td><input type="number" name="house_rent" value="{{$row->house_rent}}"
                                             class="form-control form-control-sm"></td>
+                                    @endif
+                                    @if($hidedate)
+                                    <td>{{$row->house_rent}}</td>
+                                    @endif
+                                    @if($hideButtons)
                                     <td><input type="number" name="wifi_bill" value="{{$row->wifi_bill}}"
                                             class="form-control form-control-sm"></td>
+                                    @endif
+                                    @if($hidedate)
+                                    <td>{{$row->wifi_bill}}</td>
+                                    @endif
+                                    @if($hideButtons)
                                     <td><input type="number" name="electric_bill" value="{{$row->electric_bill}}"
                                             class="form-control form-control-sm"></td>
+                                    @endif
+                                    @if($hidedate)
+                                    <td>{{$row->electric_bill}}</td>
+                                    @endif
+                                    @if($hideButtons)
                                     <td><input type="number" name="radhuni_bill" value="{{$row->radhuni_bill}}"
                                             class="form-control form-control-sm"></td>
+                                    @endif
+                                    @if($hidedate)
+                                    <td>{{$row->radhuni_bill}}</td>
+                                    @endif
+                                    @if($hideButtons)
                                     <td><input type="number" name="extra_bill" value="{{$row->extra_bill}}"
                                             class="form-control form-control-sm"></td>
+                                    @endif
+                                    @if($hidedate)
+                                    <td>{{$row->extra_bill}}</td>
+                                    @endif
                                     <td>
-                                        @foreach($bordertotaldeposit as $deposit)
-                                        @if($deposit->user_id == $row->user_id)
-                                        {{$deposit->total_amount}}
+                                        @foreach($totals as $user_id => $total)
+                                        @if($user_id == $row->user_id)
+                                        {{$total}}
                                         @endif
                                         @endforeach
                                     </td>
-
+                                    @if($hideButtons)
                                     <td class="text-center">
                                         <button class="btn btn-primary" type="submit" name="update">✓</button>
                                     </td>
@@ -106,6 +159,7 @@
                                     <button class="btn btn-primary add-payment-button" type="button" data-toggle="modal"
                                         data-target="#addPaymentModal{{$row->user_id}}"><b>+</b></button>
                                 </td>
+                                @endif
                             </tr>
 
                             <!-- Add Payment Modal -->
@@ -130,7 +184,8 @@
                                                 <div class="form-group">
                                                     <label for="date">তারিখ</label>
                                                     <input type="date" name="date" class="form-control form-control-sm"
-                                                        required>
+                                                        required min="{{ date('Y-m-d') }}"
+                                                        max="{{ date('Y-m-' . date('t')) }}">
                                                 </div>
                                                 <!-- Add a hidden input field to store user_id -->
                                                 <input type="hidden" name="user_id" value="{{$row->user_id}}">

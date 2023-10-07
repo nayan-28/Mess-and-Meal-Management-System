@@ -65,7 +65,8 @@ class BorderProfileController extends Controller
         $key=Auth::user()->key;
         $currentMonth = Carbon::now()->month;
         $status = Auth::user()->status;
-
+        $hideButtons = true;
+        $hidedate = true;
         if ($status == 0) {
             session()->flash('message', 'আপনাকে এখনো মেসে যুক্ত করেনি,দয়া করে ম্যানেজারের সাথে যোগাযোগ করুন');
             return redirect()->route('border.dashboard');
@@ -117,6 +118,7 @@ class BorderProfileController extends Controller
         ->whereMonth('date', $month)
         ->whereYear('date', now()->year)
         ->get();
+        $hideButtons = false;
         }else{
             $mealdetails = DB::table('meal')
             ->join('payment_details', function ($join) use ($key, $currentMonth) {
@@ -162,65 +164,71 @@ class BorderProfileController extends Controller
         ->whereMonth('date', $currentMonth)
         ->whereYear('date', now()->year)
         ->get();
+        $hidedate = false;
         }
 
-        return view('border.paymentdetails', compact('borderPayments','bordertotaldeposit','mealdetails','totalAmount','bordermeals'));
+        return view('border.paymentdetails', compact('borderPayments','bordertotaldeposit','mealdetails','totalAmount','bordermeals','hidedate','hideButtons','month'));
     }
 
     public function mealdetails(Request $request){
         $id = Auth::user()->id;
         $status = Auth::user()->status;
         $currentMonth = Carbon::now()->month;
-        $hideButtons = true;
-        $month=$request['month']??"";
-
         if ($status == 0) {
             session()->flash('message', 'আপনাকে এখনো মেসে যুক্ত করেনি,দয়া করে ম্যানেজারের সাথে যোগাযোগ করুন');
             return redirect()->route('border.dashboard');
         }
-        if ($month !== "") {
-        $bordermeals = DB::table('meal')
-            ->where('user_id', '=', $id)
-            ->whereMonth('date', $month)
-            ->whereYear('date', now()->year)
-            ->get();
-            $hideButtons = false;
-        }else{
             $bordermeals = DB::table('meal')
             ->where('user_id', '=', $id)
             ->whereMonth('date', $currentMonth)
             ->whereYear('date', now()->year)
             ->get();
-        }
-        return view('border.mealdetails', compact('bordermeals','hideButtons'));
+        return view('border.mealdetails', compact('bordermeals'));
+
     }
 
-
+    public function allmonthmeal(){
+        $id = Auth::user()->id;
+        $status = Auth::user()->status;
+        $currentMonth = Carbon::now()->month;
+        if ($status == 0) {
+            session()->flash('message', 'আপনাকে এখনো মেসে যুক্ত করেনি,দয়া করে ম্যানেজারের সাথে যোগাযোগ করুন');
+            return redirect()->route('border.dashboard');
+        }
+            $bordermeals = DB::table('meal')
+            ->where('user_id', '=', $id)
+            ->whereYear('date', now()->year)
+            ->get();
+            return view('border.allmonthmeal', compact('bordermeals'));
+    }
     public function addmeals(Request $request)
     {
         $id = Auth::user()->id;
-
+        $morning = $request->input('input');
+        $currentDate = Carbon::now();
+        $upcomingDate = $currentDate->addDay();
         $request->validate([
             'morning' => ['required', 'regex:/^\d+$/'],
             'lunch' => ['required', 'regex:/^\d+$/'],
             'dinner' => ['required', 'regex:/^\d+$/'],
-            'date' => ['nullable', 'date'],
         ]);
 
         $morning = $request->input('morning');
         $lunch = $request->input('lunch');
         $dinner = $request->input('dinner');
-        $date = $request->input('date') ?? now();
 
         DB::table('meal')->insert([
             'user_id' => $id,
             'morning' => $morning,
             'lunch' => $lunch,
             'dinner' => $dinner,
-            'date' => $date,
+            'date' => $upcomingDate,
+            'created_at' => now(),
         ]);
 
         return redirect()->back();
+
+
     }
 
 }

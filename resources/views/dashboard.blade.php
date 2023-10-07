@@ -21,62 +21,32 @@
                             <tr></tr>
                             <tr>
                                 <th scope="row" class="text-center">1</th>
-                                <td>নতুন সদস্যের অনুরোধ</td>
-                                <td class="text-center"><a href="{{ route('newMember')}}" class="btn btn-primary"
-                                        style="position: relative;">
-                                        View
-                                        @foreach($members as $row)
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                            {{++$newbordercounter}}
-                                            <span class="visually-hidden">unread messages</span>
-                                        </span>
-                                        @endforeach
-                                    </a>
-                                </td>
+                                <td>একনজরে মিল দেখুন</td>
+                                <td class="text-center"><a href="{{route('mealcalender')}}" class="btn btn-primary">View
+                                    </a> </td>
                             </tr>
                             <tr>
-                                @php
-                                $oldbordercounter = 0;
-                                @endphp
                                 <th scope="row" class="text-center">2</th>
-                                <td>পুরোনো সদস্য</td>
-                                <td class="text-center">
-                                    <a href="{{ route('oldMember')}}" class="btn btn-secondary"
-                                        style="position: relative;">
-                                        View
-                                        @foreach($oldemembers as $row)
-                                        <span
-                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                            {{++$oldbordercounter}}
-                                            <span class="visually-hidden">unread messages</span>
-                                        </span>
-                                        @endforeach
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row" class="text-center">3</th>
                                 <td>মিল এবং টাকা জমার বিস্তারিত</td>
                                 <td class="text-center"><a href="{{route('mealdetails')}}" class="btn btn-success">View
                                     </a> </td>
                             </tr>
                             <tr>
-                                <th scope="row" class="text-center">4</th>
+                                <th scope="row" class="text-center">3</th>
                                 <td>পেমেন্ট জমা</td>
                                 <td class="text-center"><a href="{{ route('payment')}}" class="btn btn-danger">View </a>
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row" class="text-center">5</th>
+                                <th scope="row" class="text-center">4</th>
                                 <td>বাঁজারের বিস্তারিত</td>
                                 <td class="text-center"><a href="{{ route('bazardetails')}}"
                                         class="btn btn-warning">View </a>
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row" class="text-center">6</th>
-                                <td>হিসাব</td>
+                                <th scope="row" class="text-center">5</th>
+                                <td>হিসাব করুন</td>
                                 <td class="text-center"><button class="btn btn-success" data-toggle="modal"
                                         data-target="#addPaymentModal">View</button>
                                 </td>
@@ -120,6 +90,42 @@
                                         </div>
                                     </div>
                                 </div>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-center">6</th>
+                                <td>নতুন সদস্যের অনুরোধ</td>
+                                <td class="text-center"><a href="{{ route('newMember')}}" class="btn btn-primary"
+                                        style="position: relative;">
+                                        View
+                                        @foreach($members as $row)
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{++$newbordercounter}}
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                        @endforeach
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                @php
+                                $oldbordercounter = 0;
+                                @endphp
+                                <th scope="row" class="text-center">7</th>
+                                <td>পুরোনো সদস্য</td>
+                                <td class="text-center">
+                                    <a href="{{ route('oldMember')}}" class="btn btn-secondary"
+                                        style="position: relative;">
+                                        View
+                                        @foreach($oldemembers as $row)
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{++$oldbordercounter}}
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                        @endforeach
+                                    </a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

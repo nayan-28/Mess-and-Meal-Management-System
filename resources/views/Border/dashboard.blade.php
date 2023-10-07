@@ -94,16 +94,17 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div id="myModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeModal()">&times;</span>
-                            <p id="modal-message">{{ session('message') }}</p>
-                            <div>
-                                <button class="custom-close-button" onclick="closeModal()">Close</button>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p id="modal-message">{{ session('message') }}</p>
+            <div>
+                <button class="custom-close-button" onclick="closeModal()">Close</button>
             </div>
         </div>
     </div>
@@ -127,13 +128,14 @@
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 50%;
+    max-width: 40%;
+    /* Adjust the max-width as needed */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-    /* Add a box shadow for a card-like appearance */
     border-radius: 5px;
-    /* Add rounded corners for a card-like appearance */
     text-align: center;
 }
+
+
 
 .close {
     position: absolute;

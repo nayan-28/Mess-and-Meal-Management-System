@@ -12,7 +12,14 @@
                 </div>
                 <div class="text-center">
                     <h4>বাঁজার তালিকা</h4>
-                    <p class="card-text">{{ \Carbon\Carbon::now()->format('F Y') }}</p>
+                    @if($hideButtons)<p class="card-text">{{ \Carbon\Carbon::now()->format('F Y') }}</p>@endif
+                    @if($hidedate)
+                    @php
+                    $carbon = \Carbon\Carbon::create()->month($month);
+                    $monthName = $carbon->format('F');
+                    @endphp
+                    <h5>{{ $monthName }}</h5>
+                    @endif
                 </div>
                 <div class="panel-heading" style="text-align: center;">
                     <button class="btn btn-success" data-toggle="modal" data-target="#bazardetailsmonth">অন্য মাসের
@@ -114,7 +121,9 @@
                                             <td><input type="number" name="amount" placeholder="ইংরেজিতে লিখুন"
                                                     class="form-control form-control-sm" required></td>
                                             <td><input type="date" name="date" class="form-control form-control-sm"
-                                                    required>
+                                                    required min="{{ date('Y-m-d') }}"
+                                                    max="{{ date('Y-m-' . date('t')) }}">
+                                            </td>
                                             <td>
                                                 <select class="form-select" aria-label="Default select example"
                                                     name="id" required>

@@ -72,4 +72,7 @@ Route::group(['middleware'=>['auth:border'],'prefix'=>'border','as'=>'border.'],
                 ->name('mealdetails');
     Route::post('addmeals', [BorderProfileController::class, 'addmeals'])
                 ->name('addmeals');
+    Route::get('allmonthmeal', [BorderProfileController::class, 'allmonthmeal'])
+                ->name('allmonthmeal');
+
 });

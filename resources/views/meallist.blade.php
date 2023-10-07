@@ -32,6 +32,7 @@
                                         <th>দুপুর</th>
                                         <th>রাত</th>
                                         <th>তারিখ</th>
+                                        <th>সময়</th>
                                         <th>আপডেট করুন</th>
                                     </tr>
                                 </thead>
@@ -53,7 +54,9 @@
                                                     class="form-control form-control-sm"></td>
                                             <td><input type="number" name="dinner" value="{{$row->dinner}}"
                                                     class="form-control form-control-sm"></td>
-                                            <td class="text-center">{{$row->date}}</td>
+                                            <td class="text-center"><input type="date" name="date"
+                                                    value="{{$row->date}}" class="form-control form-control-sm"></td>
+                                            <td class="text-center">{{$row->created_at}}</td>
                                             <td class="text-center">
                                                 <button type="submit" class="btn btn-primary">✓</button>
                                             </td>
